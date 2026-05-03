@@ -1,0 +1,14 @@
+torch>=2.1.0
+torchaudio>=2.1.0
+transformers>=4.40,<5.0
+accelerate>=0.30
+peft>=0.10
+
+datasets>=2.18
+soundfile>=0.12
+librosa>=0.10
+pandas>=2.0
+
+jiwer>=3.0
+matplotlib>=3.7
+tqdm>=4.66
