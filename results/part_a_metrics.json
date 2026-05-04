@@ -1,0 +1,8 @@
+{
+  "n_samples": 33,
+  "corpus_wer": 0.6216,
+  "corpus_cer": 0.1742,
+  "mean_per_sample_wer": 0.6504,
+  "mean_per_sample_cer": 0.1756,
+  "model_predictions_file": "results/part_a_predictions.jsonl"
+}

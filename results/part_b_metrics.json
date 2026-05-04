@@ -1,0 +1,16 @@
+{
+  "n_samples": 33,
+  "base": {
+    "wer": 0.6216,
+    "cer": 0.1742
+  },
+  "finetuned": {
+    "wer": 0.6255,
+    "cer": 0.1769
+  },
+  "delta": {
+    "wer": 0.0039,
+    "cer": 0.0027
+  },
+  "relative_wer_improvement": -0.62
+}

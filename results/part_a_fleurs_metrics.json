@@ -1,0 +1,8 @@
+{
+  "n_samples": 923,
+  "corpus_wer": 0.5276,
+  "corpus_cer": 0.1486,
+  "mean_per_sample_wer": 0.5367,
+  "mean_per_sample_cer": 0.1515,
+  "model_predictions_file": "results/part_a_fleurs_predictions.jsonl"
+}
