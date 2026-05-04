@@ -43,7 +43,7 @@ def parse_args():
     p.add_argument("--num-epochs", type=int, default=10)
     p.add_argument("--batch-size", type=int, default=8)
     p.add_argument("--grad-accum", type=int, default=2)
-    p.add_argument("--lr", type=float, default=1e-4)
+    p.add_argument("--lr", type=float, default=2e-5)
     p.add_argument("--warmup-steps", type=int, default=20)
     p.add_argument("--lora-r", type=int, default=32)
     p.add_argument("--lora-alpha", type=int, default=64)
@@ -65,8 +65,7 @@ def load_split(split_dir):
 
 
 def build_hf_dataset(rows, processor):
-    # We pre-load audio once and tokenize once so the Trainer can iterate fast.
-    # With ~200 samples this fits easily in memory.
+
     inputs, labels = [], []
     for r in rows:
         audio, sr = sf.read(r["audio_path"], dtype="float32")
@@ -91,7 +90,6 @@ class WhisperDataCollator:
         label_features = [{"input_ids": f["labels"]} for f in features]
         labels_batch = self.processor.tokenizer.pad(label_features, return_tensors="pt")
         labels = labels_batch["input_ids"].masked_fill(labels_batch.attention_mask.ne(1), -100)
-        # Whisper tokenizer prepends BOS, model.generate adds it again — strip.
         if (labels[:, 0] == self.processor.tokenizer.bos_token_id).all().item():
             labels = labels[:, 1:]
         batch["labels"] = labels
@@ -128,9 +126,6 @@ def main():
     print(f"Loading {args.model}")
     processor = WhisperProcessor.from_pretrained(args.model, language=args.language, task="transcribe")
     model = WhisperForConditionalGeneration.from_pretrained(args.model)
-
-    # Pin language at the model level. Without this, predict_with_generate at
-    # eval time runs language detection and validation WER becomes noise.
     model.generation_config.language = args.language
     model.generation_config.task = "transcribe"
     model.generation_config.forced_decoder_ids = None
@@ -161,7 +156,7 @@ def main():
         warmup_steps=args.warmup_steps,
         num_train_epochs=args.num_epochs,
         gradient_checkpointing=True,
-        fp16=torch.cuda.is_available(),
+        fp16=False,
         eval_strategy="epoch",
         save_strategy="epoch",
         logging_steps=5,

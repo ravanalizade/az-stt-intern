@@ -15,7 +15,6 @@ def parse_args():
 
 
 def run_loader(lang, split, max_samples, output, seed):
-    # Re-uses part_a/01_load_dataset.py — same downloader, just different split.
     cmd = [
         sys.executable, "part_a/01_load_dataset.py",
         "--lang", lang,

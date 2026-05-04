@@ -20,10 +20,6 @@ def main():
     with open(args.log, encoding="utf-8") as f:
         log = json.load(f)
 
-    # HF Trainer interleaves three kinds of entries in log_history:
-    #   - training step logs:  {"loss": ..., "epoch": ..., "step": ...}
-    #   - eval logs:           {"eval_loss": ..., "eval_wer": ..., "epoch": ...}
-    #   - final summary:       {"train_runtime": ..., ...}
     train_pts = [(e["epoch"], e["loss"]) for e in log if "loss" in e and "eval_loss" not in e]
     eval_pts = [(e["epoch"], e.get("eval_wer"), e.get("eval_loss"))
                 for e in log if "eval_wer" in e]
