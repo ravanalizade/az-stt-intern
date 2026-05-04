@@ -9,7 +9,7 @@ Tapşırıq: Open source ASR modelini Azərbaycan nitqi üzərində qiymətlənd
 | 1 | Common Voice 17 | 33 | 62.16% | 62.55% | +0.39 pp |
 | 2 | **FLEURS** | **923** | **52.76%** | **52.47%** | **−0.29 pp** ✓ |
 
-**FLEURS üzərində fine-tuning həm WER (-0.29 pp), həm də CER (-0.21 pp) üzrə yaxşılaşma verdi.** Common Voice-da fine-tuning kiçik bir reqressiyaya səbəb oldu — bu, datasetin ölçüsünün məhdudiyyətindəndir (cəmi 65 təlim nümunəsi). Ətraflı təhlil `report.docx` sənədindədir.
+**FLEURS üzərində fine-tuning həm WER (-0.29 pp), həm də CER (-0.21 pp) üzrə yaxşılaşma verdi.** Common Voice-da fine-tuning kiçik bir reqressiyaya səbəb oldu — bu, datasetin ölçüsünün məhdudiyyətindəndir (cəmi 65 təlim nümunəsi). Ətraflı təhlil `report.pdf` sənədindədir.
 
 ## Repository quruluşu
 
