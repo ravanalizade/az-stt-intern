@@ -1,10 +1,10 @@
-# Azərbaycan dili üçün ASR — Whisper-small bazaxət + LoRA fine-tuning
+# Azərbaycan dili üçün ASR — Whisper-small baseline + LoRA fine-tuning
 
-AI Engineer Intern tapşırığı: açıq mənbəli ASR modelini Azərbaycan nitqi üzərində qiymətləndirmək, fine-tune etmək və nəticələri təhlil etmək. Layihə iki dataset üzərində aparılmışdır.
+Tapşırıq: Open source ASR modelini Azərbaycan nitqi üzərində qiymətləndirmək, fine-tune etmək və nəticələri təhlil etmək. Layihə iki dataset üzərində aparılmışdır.
 
 ## Nəticələrin xülasəsi
 
-| Eksperiment | Dataset | Test ölçüsü | Bazaxət WER | Fine-tuned WER | Δ |
+| Eksperiment | Dataset | Test ölçüsü | Baseline WER | Fine-tuned WER | Δ |
 |---|---|---|---|---|---|
 | 1 | Common Voice 17 | 33 | 62.16% | 62.55% | +0.39 pp |
 | 2 | **FLEURS** | **923** | **52.76%** | **52.47%** | **−0.29 pp** ✓ |
@@ -27,7 +27,7 @@ AI Engineer Intern tapşırığı: açıq mənbəli ASR modelini Azərbaycan nit
 │   ├── 03_compare.py         # Test setində bazaxət vs fine-tuned
 │   └── 04_plot_curves.py     # Treyninq əyriləri
 ├── results/                   # Hər iki eksperimentin nəticələri
-├── report.docx                # Hissə C analitik hesabat (Azərbaycan dilində)
+├── report.pdf              
 ├── requirements.txt
 └── README.md
 ```
@@ -79,13 +79,13 @@ python part_b/03_compare.py --data data/fleurs_az_test \
 
 ## Əsas texniki qərarlar
 
-**Model: Whisper-small.** 244M parametr, multilingual pretrain edilib (Azərbaycan dili daxil olmaqla), bu da non-trivial bazaxət (52.76% WER FLEURS-da) verir.
+**Model: Whisper-small.** 244M parametr, multilingual pretrain edilib (Azərbaycan dili daxil olmaqla), bu da non-trivial baseline (52.76% WER FLEURS-da) verir.
 
-**Üsul: LoRA (rank 32) `q_proj` və `v_proj` modullarına.** Tam fine-tuning yerinə parametrlərin 1.4%-ni (3.5M) treyn edir. Bu yanaşma kiçik datasetlərdə overfitting riskini azaldır.
+**Üsul: LoRA (rank 32) `q_proj` və `v_proj` modullarına.** Tam fine-tuning yerinə parametrlərin 1.4%-ni (3.5M) train edir. Bu yanaşma kiçik datasetlərdə overfitting riskini azaldır.
 
 **Learning rate seçimi.** Mövcud Azərbaycan biliyi olan modeli pozmamaq üçün lr=5e-6 (LoRA üçün adi 1e-4-dən 20× kiçik) istifadə olundu. Yüksək LR-də (5e-5) WER 52.76%→55.30% pisləşdi; aşağı LR-də (5e-6) 52.76%→52.47% yaxşılaşdı.
 
-**Az epox sayı (2).** Whisper artıq FLEURS-tipli oxuma nitqində trenirlənib — uzun fine-tuning modeli xırda subsetə qarşı pozur. 2 epox subtle adaptasiya üçün kifayətdir.
+**Az epox sayı (2).** Whisper artıq FLEURS-tipli oxuma nitqində trainlənib — uzun fine-tuning modeli xırda subsetə qarşı pozur. 2 epox subtle adaptasiya üçün kifayətdir.
 
 **Mətn normalizasiyası:** lowercase, NFC unicode, punktuasiyanı silmək, boşluqları sıxmaq. Reference və hypothesis-ə eyni şəkildə tətbiq olunur.
 
@@ -97,7 +97,7 @@ python part_b/03_compare.py --data data/fleurs_az_test \
 
 **FLEURS** [`google/fleurs`](https://huggingface.co/datasets/google/fleurs) (`az_az` config). 2665 train + 400 dev + 923 test = ~4000 nümunə. Hər iki loader `datasets` kitabxanasının yeni versiyalarındakı uyğunluq problemlərindən qaçınmaq üçün tar arxivlərini birbaşa endirir.
 
-## Çıxış faylları
+## Output faylları
 
 **Common Voice nəticələri:**
 - `results/part_a_metrics.json`, `results/part_a_best_worst.md`
@@ -105,7 +105,7 @@ python part_b/03_compare.py --data data/fleurs_az_test \
 - `results/training_curves.png`, `results/training_log.json`
 
 **FLEURS nəticələri:**
-- `results/part_a_fleurs_metrics.json`, `results/part_a_fleurs_best_worst.md`
+- `results/part_a_fleurs_metrics.json`, 
 - `results/part_b_fleurs_v2_metrics.json`, `results/part_b_fleurs_v2_comparison.md`
 - `results/training_curves_fleurs_v2.png`, `results/training_log_fleurs_v2.json`
 
